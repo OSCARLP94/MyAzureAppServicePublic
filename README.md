@@ -10,4 +10,9 @@ Azure (blobs container, event grid, az cosmos, AZ AD).
 El repositorio privado genera la aplicacion web y la despliega usando CI/CD de AZ Devops con github en el Azure app service con la siguiente url:
 (Por seguridad, si desea acceder al contenido, debe solicitar a un administrador para que agregue su correo a la lista de permisos).
 
+https://myappservicetests.azurewebsites.net/
+
+#PD :
+Si experimenta lentitud al tratar de acceder a la url de despliegue es normal, se está utilizando un plan gratuito :) para el App Service.
+
 
