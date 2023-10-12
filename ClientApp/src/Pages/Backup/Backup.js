@@ -1,6 +1,5 @@
 ﻿import React, { useEffect, useState } from "react";
 import { BackupService } from "../../Services/backup-service";
-import { HubConnectionBuilder } from "@microsoft/signalr";
 import {
   MsalAuthenticationTemplate,
   useMsal,
@@ -29,27 +28,20 @@ export default function Backup() {
   useEffect(() => {
     (async function () {
       if (account) {
-        await ConnectNotificationSignalR();
+        await BackupService.ConnectNotificationSignalR();
         await LoadList();
       }
+
+    const disconnect=async() => {
+        await BackupService.DisconnectNotificationSignalR();
+    }
+
+    //dispose
+    return () => {
+        return disconnect();
+    };
     })();
   }, [account, instance]);
-
-  const ConnectNotificationSignalR = async () => {
-    const connection = new HubConnectionBuilder()
-      .withUrl(ClientSettings.NotifyHub)
-      .withAutomaticReconnect()
-      .build();
-
-    connection
-      .start()
-      .then((result) => {
-        connection.on("ReceiveNotification", (message) => {
-          alert("Detected blob added or deleted, please reload...");
-        });
-      })
-      .catch((e) => console.log("Connection failed: ", e));
-  };
 
   const LoadList = async () => {
     let list = await BackupService.GetListFiles(instance);

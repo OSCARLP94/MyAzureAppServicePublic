@@ -60,7 +60,7 @@ builder.Services.AddSingleton<IPostService, PostService>();
 var app = builder.Build();
 
 //Hubs
-app.MapHub<BlobNotifyHub>("hubs/BlobNotification4");
+app.MapHub<BlobNotifyHub>("hubs/BlobNotification");
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

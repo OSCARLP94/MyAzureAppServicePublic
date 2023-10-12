@@ -1,4 +1,31 @@
 ﻿import { ConsumeRoute } from '../Utils/RoutesUtils'
+import { HubConnectionBuilder } from "@microsoft/signalr"
+import { ClientSettings } from "../../clientsettings";
+
+let connection;
+
+async function ConnectNotificationSignalR ()
+{
+    connection = new HubConnectionBuilder()
+        .withUrl(ClientSettings.NotifyHub)
+        .withAutomaticReconnect()
+        .build();
+
+    connection
+        .start()
+        .then((result) => {
+            connection.on("ReceiveNotification", (message) => {
+                alert("Detected blob added or deleted, please reload...");
+            });
+        })
+        .catch((e) => console.log("Connection failed: ", e));
+};
+
+async function DisconnectNotificationSignalR() {
+    if (connection && connection.state === "Connected") {
+        connection.stop();
+    }
+}
 
 async function GetListFiles(msalInstance) {
     try {
@@ -60,5 +87,7 @@ async function SaveFile(data, msalInstance){
 export const BackupService = {
     GetListFiles,
     SaveFile,
-    DownloadFile
+    DownloadFile,
+    ConnectNotificationSignalR,
+    DisconnectNotificationSignalR
 } 
